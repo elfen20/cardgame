@@ -16,16 +16,20 @@ public class Main {
         Log("Init Game...");
         game.Init(playerCardCount);
         Log("start Game... enter 'stop' to stop at any time.");
-        Log("Enter the name of the card you want to play.");
+        Log("Enter the name of the card you want to play or 'draw' to draw a card.");
         while (game.Playing)
         {
             Log(game.GetGameStatus());
             System.out.print("> ");
             var cardstring = reader.readLine();
-            if (!game.PlayCard(cardstring)) {
-                Log("could not play card [" + cardstring + "]");
+            if (!game.CheckCommand(cardstring)) {
+                if (!game.PlayCard(cardstring)) {
+                    Log("could not play card [" + cardstring + "]");
+                }
             }
-            game.Check();
+            if (game.CheckWin()) {
+                Log("You won!");
+            }
         }
         Log("game ends.");
         System.out.flush();
