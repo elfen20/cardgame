@@ -11,8 +11,15 @@ class Game {
         sourceDeck = Deck.GetNewGameDeck();
         playerDeck = new Deck();
         for (int i=0; i<playerCardCount; i++) {
-            playerDeck.AddCard(sourceDeck.DrawFirstCard());
+            DrawPlayerCard();
         }
+    }
+
+    public Card DrawPlayerCard()
+    {
+        Card card = sourceDeck.DrawFirstCard();
+        playerDeck.AddCard(card);
+        return card;
     }
 
     public boolean PlayCard(String cardstring) {
@@ -21,18 +28,31 @@ class Game {
             playerDeck.RemoveCard(card);
             return true;
         }
-        if (cardstring.equals("stop")) {
-            this.Playing = false;
-            Log("Game stop!");
+        return false;
+    }
+
+    public boolean CheckCommand(String command) {
+        switch (command) {
+            case "draw" -> {
+                Log("drawn card: " + DrawPlayerCard().toString());
+                return true;
+            }
+            case "stop" -> {
+                this.Playing = false;
+                Log("Game stop!");
+                return true;
+
+            }
         }
         return false;
     }
 
-    public void Check() {
+    public boolean CheckWin() {
         if (playerDeck.Size() == 0) {
-            Log("You won!");
             this.Playing = false;
+            return true;
         }
+        return false;
     }
 
     public String GetGameStatus()
