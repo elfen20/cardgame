@@ -44,11 +44,6 @@ class Deck {
         return null;
     }
 
-    public Card TryGetCardWithName(String cardname)
-    {
-        return this.GetCardWithName(cardname);
-    }
-
     public void Shuffle() {
         Collections.shuffle(cards);
     }
