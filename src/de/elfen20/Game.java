@@ -5,6 +5,7 @@ class Game {
     public boolean Playing = true;
 
     private Deck sourceDeck;
+    private Deck stackDeck;
     private Deck playerDeck;
 
     public void Init(int playerCardCount) {
@@ -13,6 +14,8 @@ class Game {
         for (int i=0; i<playerCardCount; i++) {
             DrawPlayerCard();
         }
+        stackDeck = new Deck();
+        stackDeck.AddCard(sourceDeck.DrawFirstCard());
     }
 
     public Card DrawPlayerCard()
@@ -22,11 +25,20 @@ class Game {
         return card;
     }
 
+    public boolean CanPlay(Card card)
+    {
+        Card topCard = stackDeck.PeekLastCard();
+        return topCard.matchColorOrValue(card);
+    }
+
     public boolean PlayCard(String cardstring) {
         Card card = playerDeck.GetCardWithName(cardstring);
         if (card != null) {
-            playerDeck.RemoveCard(card);
-            return true;
+            if (CanPlay(card)) {
+                playerDeck.RemoveCard(card);
+                stackDeck.AddCard(card);
+                return true;
+            }
         }
         return false;
     }
@@ -57,7 +69,13 @@ class Game {
 
     public String GetGameStatus()
     {
-        return "Your Cards: " + playerDeck.toString() + " " + sourceDeck.Size() + " cards in main deck left.";
+        return "Your Cards: " +
+                playerDeck.toString() +
+                " " + sourceDeck.Size() +
+                " cards in main deck left." +
+                System.lineSeparator() +
+                stackDeck.PeekLastCard().toString() +
+                " on stack.";
     }
 
     private void Log(String text)
