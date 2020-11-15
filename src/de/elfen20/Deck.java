@@ -1,14 +1,13 @@
 package de.elfen20;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 class Deck {
     private final LinkedList<Card> cards;
 
     public Deck() {
-        cards = new LinkedList<Card>();
+        cards = new LinkedList<>();
     }
 
     public int Size() {
@@ -34,14 +33,16 @@ class Deck {
 
     public Card GetCardWithName(String cardname)
     {
-        Iterator<Card> iter = this.cards.iterator();
-        while (iter.hasNext()) {
-            Card item = iter.next();
+        for (Card item : this.cards) {
             if (item.toString().toLowerCase().equals("[" + cardname.toLowerCase() + "]")) {
                 return item;
             }
         }
         return null;
+    }
+
+    public Card PeekLastCard() {
+        return cards.getLast();
     }
 
     public void Shuffle() {
